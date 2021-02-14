@@ -1,13 +1,14 @@
 import json
 import sys
+import logging as logger
 
 
-channel_feed_partial_url = 'https://www.youtube.com/feeds/videos.xml?channel_id='
+CHANNEL_FEED_PARTIAL_URL = 'https://www.youtube.com/feeds/videos.xml?channel_id='
 
 
 def get_arguments() -> dict:
     if not len(sys.argv) == 3:
-        print('Invalid arguments')
+        logger.info('Invalid arguments')
         exit(1)
 
     args = {
@@ -18,27 +19,28 @@ def get_arguments() -> dict:
     return args
 
 
-def get_channel_id(sub):
-    return sub['snippet']['channelId']
-
-
-def extract_channel_id(file_path):
+def extract_channel_id(file_path) -> list:
     try:
         with open(file_path, 'r') as file:
             subs = json.load(file)
-            channels_id = list(map(get_channel_id, subs))
+            channels_id = list(map(lambda sub: sub['snippet']['channelId'], subs))
             return channels_id
 
     except Exception:
-        print('An error occurred while fetching the requested file')
+        logger.error('An error occurred while fetching the requested file')
         exit(1)
 
 
+def generate_opml(channels_id: list) -> None:
+    logger.warn('TODO')
+
 
 def main():
-    args = validate_arguments()
-    channels_id = extract_channel(args['target_file'])
+    args = get_arguments()
+    channels_id = extract_channel_id(args['target_file'])
+    generate_opml(channels_id)
+
 
 if __name__ == '__main__':
+    logger.basicConfig(level=logger.INFO)
     main()
-    exit(0)

@@ -1,1 +1,6 @@
+# VSCode
+.vscode/*
+!.vscode/launch.json
+
+# Project
 subscriptions.json
