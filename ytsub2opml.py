@@ -43,7 +43,8 @@ def extract_channels(file_path: str) -> list:
 
     try:
         with open(file_path, 'r') as file:
-            channels = json.load(file)
+            channels = list(json.load(file))
+            channels.sort(key=lambda x: x['snippet']['title'].lower())
 
             return channels
 
